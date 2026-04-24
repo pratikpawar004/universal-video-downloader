@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Universal Video Downloader</title>
+
+<style>
+body {
+    font-family: 'Segoe UI';
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    background: rgba(30, 41, 59, 0.9);
+    padding: 30px;
+    border-radius: 18px;
+    width: 360px;
+    text-align: center;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    background: #0f172a;
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #22c55e;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.progress {
+    margin-top: 15px;
+    background: #334155;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 10px;
+}
+
+.bar {
+    height: 10px;
+    width: 0%;
+    background: #22c55e;
+}
+
+.status {
+    margin-top: 10px;
+}
+
+.nav a {
+    color: #22c55e;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>🚀 Downloader</h2>
+
+<input id="url" placeholder="Paste URL">
+
+<select id="quality">
+<option value="1080">1080p</option>
+<option value="720" selected>720p</option>
+<option value="360">360p</option>
+</select>
+
+<select id="format">
+<option value="mp4">MP4</option>
+<option value="mp3">MP3</option>
+</select>
+
+<button id="btn" onclick="download()">Download</button>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+<div class="status" id="status"></div>
+
+ <div class="nav">
+    <a href="/about">About</a> |
+    <a href="/tech">Tech</a> |
+    <a href="/platforms">Platforms</a> |
+    <a href="/library">Library</a>
+    </div>
+
+</div>
+
+<script>
+
+let interval = null
+
+function download(){
+    let url = document.getElementById("url").value
+
+    fetch("/download",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            url:url,
+            quality:document.getElementById("quality").value,
+            format:document.getElementById("format").value
+        })
+    })
+
+    document.getElementById("status").innerText="Added to queue..."
+
+    interval = setInterval(updateProgress,1000)
+}
+
+function updateProgress(){
+    fetch("/progress")
+    .then(r=>r.json())
+    .then(d=>{
+        let p = d.progress
+        document.getElementById("bar").style.width = p+"%"
+
+        if(p>=100){
+            clearInterval(interval)
+            document.getElementById("status").innerText="✅ Done"
+        }
+    })
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Library</title>
+
+<style>
+body { background:#0f172a; color:white; font-family:sans-serif; padding:20px; }
+
+.back-btn {
+    position:absolute; top:20px; left:20px;
+    padding:8px 14px; background:#334155; color:white;
+    border:none; border-radius:8px;
+}
+
+.search-box {
+    display:block;
+    margin:20px auto;
+    padding:10px;
+    width:300px;
+    border-radius:8px;
+    border:none;
+    background:#1e293b;
+    color:white;
+}
+
+.grid {
+    display:flex; gap:20px; flex-wrap:wrap; justify-content:center;
+}
+
+.card {
+    background:#1e293b;
+    padding:12px;
+    border-radius:12px;
+    width:260px;
+    height:320px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.thumb {
+    width:100%;
+    height:150px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.title { font-size:14px; }
+
+.btn {
+    margin-top:5px;
+    padding:6px 10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.play { background:#22c55e; }
+.delete { background:#ef4444; }
+
+audio { width:100%; }
+</style>
+</head>
+
+<body>
+
+<button onclick="history.back()" class="back-btn">⬅ Back</button>
+
+<h1>📂 Your Library</h1>
+
+<!-- 🔍 SEARCH -->
+<input class="search-box" id="search" placeholder="Search videos or audio..." oninput="filterData()">
+
+<h2>🎥 Videos</h2>
+<div class="grid" id="videos"></div>
+
+<h2>🎧 Audio</h2>
+<div class="grid" id="audios"></div>
+
+<script>
+
+let allVideos = []
+let allAudios = []
+
+fetch("/recent")
+.then(res=>res.json())
+.then(data=>{
+    allVideos = data.videos
+    allAudios = data.audios
+    render(allVideos, allAudios)
+})
+
+// 🎯 RENDER FUNCTION
+function render(videos, audios){
+
+    let vDiv = document.getElementById("videos")
+    let aDiv = document.getElementById("audios")
+
+    vDiv.innerHTML = ""
+    aDiv.innerHTML = ""
+
+    // VIDEO
+    videos.forEach(v=>{
+        let thumb = v.thumb ? `/thumb/${v.name}/${v.thumb}` : "/static/default-video.jpg"
+
+        vDiv.innerHTML += `
+        <div class="card">
+            <img class="thumb" src="${thumb}">
+            <div class="title">${v.name}</div>
+            <button class="btn play" onclick="window.open('/video/${v.name}/${v.video}')">▶ Play</button>
+            <button class="btn delete" onclick="del('video','${v.name}')">🗑 Delete</button>
+        </div>`
+    })
+
+    // AUDIO
+    audios.forEach(a=>{
+        let thumb = a.thumb ? `/audio-thumb/${a.name}/${a.thumb}` : "/static/default-audio.jpg"
+
+        aDiv.innerHTML += `
+        <div class="card">
+            <img class="thumb" src="${thumb}">
+            <div class="title">${a.name}</div>
+
+            <audio controls>
+                <source src="/audio/${a.name}/${a.audio}" type="audio/mpeg">
+            </audio>
+
+            <button class="btn delete" onclick="del('audio','${a.name}')">🗑 Delete</button>
+        </div>`
+    })
+}
+
+// 🔍 FILTER FUNCTION
+function filterData(){
+    let q = document.getElementById("search").value.toLowerCase()
+
+    let filteredVideos = allVideos.filter(v => v.name.toLowerCase().includes(q))
+    let filteredAudios = allAudios.filter(a => a.name.toLowerCase().includes(q))
+
+    render(filteredVideos, filteredAudios)
+}
+
+// DELETE
+function del(type,name){
+    fetch("/delete",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({type:type,name:name})
+    }).then(()=>location.reload())
+}
+
+</script>
+
+</body>
+</html>

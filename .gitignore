@@ -1,0 +1,44 @@
+# Python cache
+
+**pycache**/
+*.pyc
+
+# Virtual environment
+
+venv/
+env/
+
+# Downloads (IMPORTANT)
+
+downloads/
+
+# Database files
+
+*.db
+
+# Test files
+
+db_test.py
+test.py
+
+# yt-dlp binary
+
+yt-dlp.exe
+
+# FFmpeg 
+
+ffmpeg.exe
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Logs
+
+*.log
+
+# IDE files
+
+.vscode/
+.idea/
