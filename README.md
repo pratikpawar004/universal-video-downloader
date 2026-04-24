@@ -31,19 +31,32 @@ A powerful **local video & audio downloader** built using **Flask, yt-dlp, FFmpe
 ## 📁 Project Structure
 
 ```id="x3c9oz"
+
 project/
 │
 ├── app.py
-├── downloads/
-│   ├── videos/
-│   └── music/
+├── README.md
+├── .gitignore
+│
 ├── templates/
 │   ├── index.html
-│   └── library.html
-├── downloads.db
-├── yt-dlp.exe
-└── ffmpeg.exe   ← IMPORTANT
+│   ├── library.html
+│   ├── about.html
+│   ├── tech.html
+│   └── platforms.html
+│
+├── static/          # (optional: images, css)
+│
+├── downloads/       # (ignored in git)
+│   ├── videos/
+│   └── music/
+│
+├── downloads.db     # (ignored in git)
+│
+├── yt-dlp.exe       # (ignored in git)
+└── ffmpeg.exe       # (ignored in git ⚠️ IMPORTANT)
 ```
+
 
 ---
 
