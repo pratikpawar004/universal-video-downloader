@@ -52,8 +52,8 @@ project/
 ### 1️⃣ Clone repo
 
 ```id="j9j1xq"
-git clone https://github.com/your-username/video-downloader.git
-cd video-downloader
+https://github.com/pratikpawar004/universal-video-downloader.git
+cd universal-video-downloader
 ```
 
 ### 2️⃣ Install Python dependencies
