@@ -163,7 +163,6 @@ Table: `history`
 ## ⚠️ Notes
 
 * Local app only (127.0.0.1)
-* Sharing links won’t work externally
 * Internet required
 * FFmpeg must be present
 
